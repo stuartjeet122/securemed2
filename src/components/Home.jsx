@@ -92,7 +92,7 @@ const Home = () => {
         </form>
       </div>
     </section>
-  );
+  )
 };
 
 export default Home;
