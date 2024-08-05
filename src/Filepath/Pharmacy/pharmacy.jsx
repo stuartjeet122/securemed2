@@ -1,33 +1,35 @@
 import REACT, { useState }  from 'react';
 import ReusableButton from '../../components/Button/ReusableButton';
 import ReusableInput from '../../components/Input/ReusableInput';
+import ReusableTable from '../../components/Table/ReusableTable';
+import ReusableDropdown from '../../components/DropDown/ReusableDropDown';
 
 function Pharmacy(){
-    const [inputValue, setInputValue] = useState('');
+    const [selectedOccupation, setSelectedOccupation] = useState('');
 
-    const handleInputChange = (event) => {
-      setInputValue(event.target.value);
+    const handleDropdownChange = (event) => {
+      setSelectedOccupation(event.target.value);
     };
-    const handleClick = () => {
-        alert('Button clicked!');
-      };
-
+  
+    const occupations = [
+      { value: '', label: 'All' },
+      { value: 'Developer', label: 'Developer' },
+      { value: 'Designer', label: 'Designer' },
+      { value: 'Manager', label: 'Manager' },
+    ];
+  
     return (
-        <div>
+      <div className="p-6">
         <h1>Welcome to My App</h1>
-        <ReusableInput
-          id="email"
-          type="text"
-          placeholder="Enter text"
-          value={inputValue}
-          onChange={handleInputChange}
-          label="Email Address"
-          className="mt-1"
+        <ReusableDropdown
+          id="occupation"
+          options={occupations}
+          selectedValue={selectedOccupation}
+          onChange={handleDropdownChange}
+          className="mb-4"
         />
-        <ReusableButton title="Hover Me" onClick={handleClick} />
       </div>
-    
     );
-}
+  };
 
 export default Pharmacy;
