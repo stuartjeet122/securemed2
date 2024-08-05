@@ -6,7 +6,7 @@ const logoUrl = "https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=50
 const navLinks = [
   { to: '/', text: 'Home' },
   { to: '/Filepath/Doctor/doctor', text: 'Doctors' },
-  { to: '/Filepath/Nurse/nurse', text: 'Nurses' },
+  { to: '/Filepath/Nurse/Appointment', text: 'Nurses' },
   { to: '/Filepath/Pharmacy/pharmacy', text: 'Pharmacists' },
   { to: '/Filepath/Patient/patient', text: 'Patients' },
   { to: '/Filepath/Admin/admin', text: 'Admin' },
