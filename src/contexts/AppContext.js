@@ -35,6 +35,20 @@ export const AppProvider = ({ children }) => {
     }
   };
 
+  const callContractMethod = async (methodName, args = [], send = false, options = {}) => {
+    try {
+      if (send) {
+        return await contract.methods[methodName](...args).send({ from: account, ...options });
+      } else {
+        return await contract.methods[methodName](...args).call();
+      }
+    } catch (error) {
+      console.error(`Error calling contract method ${methodName}:`, error);
+      throw error;
+    }
+  };
+
+
   useEffect(() => {
     if (connected) {
       // Perform any additional setup after connection is established
@@ -42,7 +56,7 @@ export const AppProvider = ({ children }) => {
   }, [connected]);
 
   return (
-    <AppContext.Provider value={{ web3, account, connectToMetaMask, connected, connecting, contract }}>
+    <AppContext.Provider value={{ web3, account, connectToMetaMask, connected, connecting, contract, callContractMethod  }}>
       {children}
     </AppContext.Provider>
   );

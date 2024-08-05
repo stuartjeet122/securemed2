@@ -4,7 +4,7 @@ import { useAppContext } from '../contexts/AppContext';
 import toast from 'react-hot-toast';
 
 const Home = () => {
-  const { web3, account, connectToMetaMask, connected, connecting, contract } = useAppContext();
+  const { web3, account, connectToMetaMask, connected, connecting, contract, callContractMethod } = useAppContext();
   const inputRef = useRef(null);
 
   const [isLoading, setIsLoading] = useState('idle');
@@ -13,7 +13,7 @@ const Home = () => {
   const getNumber = async () => {
     try {
       setIsLoading('fetching');
-      const number = await contract.methods.getData().call();
+      const number = await callContractMethod('getData');
       setNumber(number.toString());
     } catch (error) {
       toast.error('Error fetching number');
@@ -39,8 +39,7 @@ const Home = () => {
         return;
       }
 
-      await contract.methods.setData(inputValue)
-        .send({ from: account, gas: 3000000 })
+      await callContractMethod('setData', [inputValue], true, { gas: 3000000 })
         .on('receipt', () => {
           inputRef.current.value = '';
           getNumber();
