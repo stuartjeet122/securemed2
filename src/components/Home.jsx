@@ -14,7 +14,7 @@ const Home = () => {
     try {
       setIsLoading('fetching');
       const number = await contract.methods.getData().call();
-      setNumber(number);
+      setNumber(number.toString());
     } catch (error) {
       toast.error('Error fetching number');
     } finally {
@@ -57,6 +57,16 @@ const Home = () => {
   };
 
   useEffect(() => {
+    const connectWallet = async () => {
+      if (!connected) {
+        await connectToMetaMask();
+      }
+    };
+
+    connectWallet();
+  }, [connected, connectToMetaMask]);
+
+  useEffect(() => {
     if (connected) {
       getNumber();
     }
@@ -65,10 +75,10 @@ const Home = () => {
   return (
     <section className={styles.home}>
       <div className={styles.wallet}>
-        {!connected && (
-          <button onClick={connectToMetaMask}>
-            {connecting ? 'Connecting...' : 'Connect to MetaMask'}
-          </button>
+        {connected ? (
+          <p>Connected: {account}</p>
+        ) : (
+          <p>Connecting to MetaMask...</p>
         )}
       </div>
       <div className={styles.number}>
@@ -92,7 +102,7 @@ const Home = () => {
         </form>
       </div>
     </section>
-  )
+  );
 };
 
 export default Home;
