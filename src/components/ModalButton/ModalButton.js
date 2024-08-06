@@ -1,20 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const ModalButton = ({ buttonTitle, ModalContent, htmlContent }) => {
-  const [show, setShow] = useState(false);
+const ModalButton = ({ buttonTitle, ModalContent, htmlContent, alwaysShow = false }) => {
+  const [show, setShow] = useState(alwaysShow);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  // Effect to handle alwaysShow prop and control initial state
+  useEffect(() => {
+    if (alwaysShow) {
+      setShow(true);
+    }
+  }, [alwaysShow]);
+
   return (
     <>
-      <button
-        className="text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5"
-        type="button"
-        onClick={handleShow}
-      >
-        {buttonTitle}
-      </button>
+      {!alwaysShow && (
+        <button
+          className="text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5"
+          type="button"
+          onClick={handleShow}
+        >
+          {buttonTitle}
+        </button>
+      )}
 
       {show && (
         <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black bg-opacity-50">

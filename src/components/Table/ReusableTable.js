@@ -1,6 +1,6 @@
-
-import React, { useState } from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { useTable, useSortBy, useGlobalFilter } from 'react-table';
 import classNames from 'classnames';
 
 const ReusableInput = ({ type, placeholder, value, onChange, label, className, ...props }) => {
@@ -44,27 +44,22 @@ ReusableInput.defaultProps = {
 };
 
 const ReusableTable = ({ title, data }) => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filteredData, setFilteredData] = useState(data);
+  const columns = useMemo(
+    () => Object.keys(data[0]).map((key) => ({ Header: key.charAt(0).toUpperCase() + key.slice(1), accessor: key })),
+    [data]
+  );
 
-  const handleSearchChange = (event) => {
-    const query = event.target.value.toLowerCase();
-    setSearchQuery(query);
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+    state,
+    setGlobalFilter,
+  } = useTable({ columns, data }, useGlobalFilter, useSortBy);
 
-    const filtered = data.filter(row => {
-      return Object.values(row).some(
-        value => value.toString().toLowerCase().includes(query)
-      );
-    });
-
-    setFilteredData(filtered);
-  };
-
-  if (!filteredData || filteredData.length === 0) {
-    return <p>No data available</p>;
-  }
-
-  const headers = Object.keys(filteredData[0]);
+  const { globalFilter } = state;
 
   return (
     <div className="overflow-x-auto p-6 bg-white-50">
@@ -73,33 +68,52 @@ const ReusableTable = ({ title, data }) => {
         id="search"
         type="text"
         placeholder="Search..."
-        value={searchQuery}
-        onChange={handleSearchChange}
+        value={globalFilter || ''}
+        onChange={(e) => setGlobalFilter(e.target.value)}
         label="Search"
         className="mb-4"
       />
-      <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
-        <thead>
-          <tr className="bg-[#4070f4] text-white">
-            {headers.map((header) => (
-              <th key={header} className="text-left py-3 px-4">
-                {header.charAt(0).toUpperCase() + header.slice(1)}
-              </th>
+      {rows.length === 0 ? (
+        <p>No data available</p>
+      ) : (
+        <table {...getTableProps()} className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
+          <thead>
+            {headerGroups.map(headerGroup => (
+              <tr {...headerGroup.getHeaderGroupProps()} className="bg-[#4070f4] text-white">
+                {headerGroup.headers.map(column => (
+                  <th
+                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                    className="text-left py-3 px-4 cursor-pointer"
+                  >
+                    {column.render('Header')}
+                    <span>
+                      {column.isSorted
+                        ? column.isSortedDesc
+                          ? ' 🔽'
+                          : ' 🔼'
+                        : ''}
+                    </span>
+                  </th>
+                ))}
+              </tr>
             ))}
-          </tr>
-        </thead>
-        <tbody>
-          {filteredData.map((row, rowIndex) => (
-            <tr key={rowIndex} className={`border-b border-gray-200 ${rowIndex % 2 === 0 ? 'bg-gray-100' : 'bg-white'}`}>
-              {headers.map((header) => (
-                <td key={header} className="py-3 px-4 text-gray-700">
-                  {row[header]}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {rows.map(row => {
+              prepareRow(row);
+              return (
+                <tr {...row.getRowProps()} className={`border-b border-gray-200 ${row.index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}`}>
+                  {row.cells.map(cell => (
+                    <td {...cell.getCellProps()} className="py-3 px-4 text-gray-700">
+                      {cell.render('Cell')}
+                    </td>
+                  ))}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 };

@@ -55,8 +55,8 @@ function Admin(){
     const containerPanelcss = "border border-black rounded p-5";
 
     return (
-        <div className="mt-12 container mx-auto">
-            <h1 className='text-2xl uppercase text-center mb-5 font-extrabold'>Admin Mode</h1>
+        <div className="mt-12 container mx-auto px-10">
+            <h1 className='text-4xl uppercase text-center mb-10 font-extrabold'>Admin Mode</h1>
             <div className="grid md:grid-cols-4 grid-cols-2 gap-10 justify-center">
                 {
                     containerpanel.map((item, index) => (
