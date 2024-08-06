@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-const ReusableInput = ({ type, placeholder, value, onChange, label, className, required, options, ...props }) => {
+const ReusableInput = ({ type, placeholder, value, onChange, label, className, required, options, defaultValue, ...props }) => {
   const defaultClasses = "peer w-full bg-transparent outline-none px-4 text-base rounded-xl bg-white border border-[#4070f4] focus:shadow-md";
   const combinedClasses = classNames(defaultClasses, className);
 
@@ -10,7 +10,7 @@ const ReusableInput = ({ type, placeholder, value, onChange, label, className, r
     <div className="w-60 h-12 relative flex rounded-xl">
       {type === 'dropdown' ? (
         <select
-          value={value}
+          value={value || defaultValue}
           onChange={onChange}
           className={combinedClasses}
           required={required}
@@ -24,7 +24,7 @@ const ReusableInput = ({ type, placeholder, value, onChange, label, className, r
       ) : (
         <input
           type={type}
-          value={value}
+          value={value || defaultValue}
           onChange={onChange}
           className={combinedClasses}
           required={required}
@@ -43,7 +43,7 @@ const ReusableInput = ({ type, placeholder, value, onChange, label, className, r
 };
 
 ReusableInput.propTypes = {
-  type: PropTypes.oneOf(['text', 'number', 'password', 'dropdown', 'date', 'time']), // Updated to include 'date' and 'time'
+  type: PropTypes.oneOf(['text', 'number', 'password', 'dropdown', 'date', 'time']),
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   onChange: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,
@@ -53,7 +53,8 @@ ReusableInput.propTypes = {
   options: PropTypes.arrayOf(PropTypes.shape({
     value: PropTypes.any.isRequired,
     label: PropTypes.string.isRequired,
-  })),  // Added for dropdown options
+  })),
+  defaultValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]), // Added for default value
 };
 
 ReusableInput.defaultProps = {
@@ -61,7 +62,8 @@ ReusableInput.defaultProps = {
   value: '',
   className: '',
   required: false,
-  options: [],  // Added for dropdown options
+  options: [],
+  defaultValue: '', // Added default value
 };
 
 export default ReusableInput;
