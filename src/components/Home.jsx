@@ -13,8 +13,9 @@ const Home = () => {
   const getNumber = async () => {
     try {
       setIsLoading('fetching');
-      const number = await ensureConnectionAndCall('getData');
-      setNumber(number.toString());
+      const number = await ensureConnectionAndCall('getAllDoctors');
+      console.log(number);
+      // setNumber(number.toString());
     } catch (error) {
       toast.error('Error fetching number');
     } finally {

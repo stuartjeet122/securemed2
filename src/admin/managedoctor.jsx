@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import Modal from '../components/ModalButton/ModalButton';
 import Input from '../components/Input/ReusableInput';
 import Button from '../components/Button/ReusableButton';
 import Table from '../components/Table/ReusableTable';
+import { useAppContext } from '../contexts/AppContext';
+
+
+
 
 const data = [{
   data: 'test', data2: 'test2'
@@ -15,6 +19,7 @@ const options = [
 ];
 
 function GenerateModal() {
+
   const [licenseNumber, setLicenseNumber] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -143,13 +148,28 @@ function GenerateModal() {
 }
 
 function ManageDoctor() {
+  const { ensureConnectionAndCall } = useAppContext();
+  const [doctors, setDoctors] = useState([]);
+
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      try {
+        const result = await ensureConnectionAndCall('getAllDoctors');
+        setDoctors(result);
+      } catch (error) {
+        console.error('Error fetching doctors:', error);
+      }
+    };
+
+    fetchDoctors();
+  }, [ensureConnectionAndCall]);
   return (
     <div className='mt-8 container px-4 mx-auto'>
       <div className='flex justify-end'>
         <Modal buttonTitle="ADD DOCTOR" ModalContent={GenerateModal} />
       </div>
       <div className="container mx-auto">
-        <Table title='List Of Doctors' data={data} />
+        <Table title='List Of Doctors' data={doctors} />
       </div>
     </div>
   );
