@@ -43,7 +43,7 @@ const ReusableInput = ({ type, placeholder, value, onChange, label, className, r
 };
 
 ReusableInput.propTypes = {
-  type: PropTypes.oneOf(['text', 'number', 'password', 'dropdown']),  // Updated line
+  type: PropTypes.oneOf(['text', 'number', 'password', 'dropdown', 'date', 'time']), // Updated to include 'date' and 'time'
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   onChange: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,
@@ -53,7 +53,7 @@ ReusableInput.propTypes = {
   options: PropTypes.arrayOf(PropTypes.shape({
     value: PropTypes.any.isRequired,
     label: PropTypes.string.isRequired,
-  })),  // Added line for dropdown options
+  })),  // Added for dropdown options
 };
 
 ReusableInput.defaultProps = {
@@ -61,7 +61,7 @@ ReusableInput.defaultProps = {
   value: '',
   className: '',
   required: false,
-  options: [],  // Added line for dropdown options
+  options: [],  // Added for dropdown options
 };
 
 export default ReusableInput;

@@ -6,7 +6,10 @@ import Table from '../components/Table/ReusableTable';
 
 const data = [{
     data: 'test', data2: 'test2'
-}];
+},{
+    data: 'test2', data2: 'test'
+}
+];
 
 function GenerateModal(){
     return (
