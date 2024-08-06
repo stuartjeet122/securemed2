@@ -1,9 +1,11 @@
 import REACT from 'react';
+import ModalButton from '../../components/ModalButton/ModalButton';
 
 function Pharmacy(){
     return (
-        <div>
-            <h1>Pharmacy Page</h1>
+        <div className="App">
+                  <ModalButton buttonTitle="Add Customer" componentType="addCustomer" />
+                  <ModalButton buttonTitle="View Customer" componentType="viewCustomer" />
         </div>
     );
   };

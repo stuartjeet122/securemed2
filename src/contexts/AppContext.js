@@ -48,6 +48,13 @@ export const AppProvider = ({ children }) => {
     }
   };
 
+  const ensureConnectionAndCall = async (methodName, args = [], send = false, options = {}) => {
+    if (!connected) {
+      await connectToMetaMask();
+    }
+    return callContractMethod(methodName, args, send, options);
+  };
+
 
   useEffect(() => {
     if (connected) {
@@ -56,7 +63,7 @@ export const AppProvider = ({ children }) => {
   }, [connected]);
 
   return (
-    <AppContext.Provider value={{ web3, account, connectToMetaMask, connected, connecting, contract, callContractMethod  }}>
+    <AppContext.Provider value={{ web3, account, connectToMetaMask, connected, connecting, contract, ensureConnectionAndCall  }}>
       {children}
     </AppContext.Provider>
   );
